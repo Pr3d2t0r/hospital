@@ -1,6 +1,6 @@
 <?php
 
-class MY_Model extends CI_Model
+class   MY_Model extends CI_Model
 {
     protected $table;
 
@@ -17,17 +17,17 @@ class MY_Model extends CI_Model
     /**
      * @throws Exception Choose a valid return type!
      */
-    public function getById($id, $mode=ReturnType::ARRAY, $class=null){
+    public function getById($id, $mode=MY_ReturnType::ARRAY, $class=null){
         if (is_null($id))
             return false;
         $this->db->where('id', $id);
         $query = $this->db->get($this->table);
         if ($query->num_rows() > 0) {
-            if ($mode == ReturnType::ARRAY)
+            if ($mode == MYReturnType::ARRAY)
                 return $query->row_array();
-            elseif ($mode == ReturnType::OBJECT)
+            elseif ($mode == MYReturnType::OBJECT)
                 return $query->row_object();
-            elseif ($mode == ReturnType::OBJECTTOCLASS)
+            elseif ($mode == MYReturnType::OBJECTTOCLASS)
                 return $query->row(0, $class);
             else
                 throw new Exception("Choose a valid return type!");
@@ -38,15 +38,15 @@ class MY_Model extends CI_Model
     /**
      * @throws Exception Choose a valid return type!
      */
-    public function getAll($sort = 'id', $order = 'asc', $mode=ReturnType::ARRAY, $class=null){
+    public function getAll($sort = 'id', $order = 'asc', $mode="ARRAY", $class=null){
         $this->db->order_by($sort, $order);
         $query = $this->db->get($this->table);
         if ($query->num_rows() > 0) {
-            if ($mode == ReturnType::ARRAY)
+            if ($mode == "ARRAY")
                 return $query->result_array();
-            elseif ($mode == ReturnType::OBJECT)
+            elseif ($mode == "OBJECT")
                 return $query->result_object();
-            elseif ($mode == ReturnType::OBJECTTOCLASS)
+            elseif ($mode == "OBJECTTOCLASS")
                 return $query->result($class);
             else
                 throw new Exception("Choose a valid return type!");

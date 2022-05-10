@@ -52,3 +52,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['translate_uri_dashes'] = FALSE;
 $route['contactus'] = 'ContactUs';
+$route['medicos'] = 'Medicos';
+$route['utentes'] = 'Utentes';

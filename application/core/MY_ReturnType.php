@@ -1,6 +1,6 @@
 <?php
 
-enum ReturnType{
+enum MY_ReturnType{
     case ARRAY;
     case OBJECT;
     case OBJECTTOCLASS;

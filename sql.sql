@@ -1,3 +1,7 @@
+create schema if not exists hospital;
+
+use hospital;
+
 create table address
 (
     id   int(4) auto_increment primary key,

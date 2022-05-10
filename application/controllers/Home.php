@@ -5,11 +5,11 @@ class Home extends CI_Controller {
 	public function index()
 	{
         $data = [
-
+            "title" => "Hospital"
         ];
-		$this->load->view('commons/header');
-		$this->load->view('commons/menu');
-        $this->load->view('home');
-        $this->load->view('commons/footer');
+		$this->load->view('commons/header', $data);
+		$this->load->view('commons/menu', $data);
+        $this->load->view('home', $data);
+        $this->load->view('commons/footer', $data);
     }
 }
