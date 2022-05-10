@@ -36,7 +36,7 @@ create table doctor
     id         int(4) auto_increment primary key,
     name       varchar(80)  not null,
     nib        varchar(25)  not null,
-    nif        int(9) not null,
+    nif        varchar(9) not null,
     specialty  varchar(100) not null,
     address_id int(4) not null,
     birthday   date null,
