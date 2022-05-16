@@ -17,7 +17,8 @@ class ContactUs extends MY_Controller
     public function index(){
         $data = [
             "title" => "Contact Us",
-            "success"    => $this->session->flashdata("success_msg") ?? null
+            "success"    => $this->session->flashdata("success_msg") ?? null,
+            "isLoggedIn" => $this->isLoggedIn
         ];
 
         $data['googleKey'] = "6LeWsDUfAAAAAMJhNyINrQ8a9uw0auRkCmuCPNW6";

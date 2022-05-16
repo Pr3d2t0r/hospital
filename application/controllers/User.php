@@ -11,7 +11,8 @@ class User extends MY_Controller {
 
     public function register(){
         $data = [
-            "title" => "Register User"
+            "title" => "Register User",
+            "isLoggedIn" => $this->isLoggedIn
         ];
 
         $this->form_validation->set_rules('username', 'Username', 'required|min_length[3]|max_length[50]');

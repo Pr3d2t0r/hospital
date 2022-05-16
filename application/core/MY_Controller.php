@@ -11,7 +11,7 @@ class MY_Controller extends CI_Controller
         parent::__construct();
         $userId = $this->isUserLogedIn();
         if ($userId) {
-            $this->user = $this->UsersModel->getById($userId, mode: "OBJECT");
+            $this->user = $this->UsersModel->getById($userId, "OBJECT");
             $this->isLoggedIn = true;
             $this->isSuperAdmin = $this->hasPermissions("SuperAdmin");
         }

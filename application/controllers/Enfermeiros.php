@@ -18,7 +18,7 @@ class Enfermeiros extends MY_Controller
             "title"      => "Nurses",
             "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
             "isLoggedIn" => $this->isLoggedIn,
-            "nurses"     => $this->AddressModel->_modelar_array($this->NursesModel->getAll(mode:"OBJECT") ?? []),
+            "nurses"     => $this->AddressModel->_modelar_array($this->NursesModel->getAll('id', 'asc', "OBJECT") ?? []),
             "success"    => $this->session->flashdata("success_msg") ?? null
         ];
 

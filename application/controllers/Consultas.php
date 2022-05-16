@@ -19,7 +19,7 @@ class Consultas extends MY_Controller
             "success"   => $this->session->flashdata("success_msg") ?? null,
             "isLoggedIn" => $this->isLoggedIn,
             "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
-            "consultas" => $this->ConsultationsModel->getForToday(mode: "OBJECT") ?? []
+            "consultas" => $this->ConsultationsModel->getForToday("OBJECT") ?? []
         ];
 
         for($i = 0; $i < count($data['consultas']); $i++) {
@@ -39,7 +39,7 @@ class Consultas extends MY_Controller
             "success"   => $this->session->flashdata("success_msg") ?? null,
             "isLoggedIn" => $this->isLoggedIn,
             "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
-            "consultas" => $this->ConsultationsModel->getAll(mode: "OBJECT") ?? []
+            "consultas" => $this->ConsultationsModel->getAll('id', 'asc', "OBJECT") ?? []
         ];
 
         for($i = 0; $i < count($data['consultas']); $i++) {
@@ -65,7 +65,7 @@ class Consultas extends MY_Controller
             "isSuperAdmin" => $this->isSuperAdmin,
             "isLoggedIn" => $this->isLoggedIn,
             "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
-            "doctors"      => $this->MedicosModel->getAll(mode: "OBJECT")
+            "doctors"      => $this->MedicosModel->getAll('id', 'asc', "OBJECT")
         ];
 
         if ($this->isSuperAdmin)

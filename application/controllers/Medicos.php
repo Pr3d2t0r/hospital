@@ -18,7 +18,7 @@ class Medicos extends MY_Controller
             "title"       => "Medics",
             "isLoggedIn"  => $this->isLoggedIn,
             "hasAdmin"    => $this->isSuperAdmin || $this->hasPermissions("Admin"),
-            "medicos"     => $this->AddressModel->_modelar_array($this->MedicosModel->getAll(mode:"OBJECT") ?? []),
+            "medicos"     => $this->AddressModel->_modelar_array($this->MedicosModel->getAll('id', 'asc', "OBJECT") ?? []),
             "success"     => $this->session->flashdata("success_msg") ?? null,
             "edit_url"    => base_url('doctors/edit/'),
             "remove_url"  => base_url('doctors/remove/'),

@@ -18,7 +18,7 @@ class Utentes extends MY_Controller
             "title"      => "Utentes",
             "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
             "isLoggedIn" => $this->isLoggedIn,
-            "utentes"    => $this->AddressModel->_modelar_array($this->UtentesModel->getAll(mode:"OBJECT") ?? []),
+            "utentes"    => $this->AddressModel->_modelar_array($this->UtentesModel->getAll('id', 'asc', "OBJECT") ?? []),
             "success"    => $this->session->flashdata("success_msg") ?? null
         ];
 
