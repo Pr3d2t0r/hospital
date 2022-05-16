@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Medicos extends MY_Controller
+class Enfermeiros extends MY_Controller
 {
 
 
@@ -9,45 +9,43 @@ class Medicos extends MY_Controller
     {
         parent::__construct();
         $this->load->library(array('form_validation', 'session', 'model_errors'));
-        $this->load->model(array("MedicosModel", "AddressModel"));
+        $this->load->model(array("NursesModel", "AddressModel"));
 
     }
 
     public function index(){
         $data = [
-            "title"      => "Medics",
-            "isLoggedIn" => $this->isLoggedIn,
+            "title"      => "Nurses",
             "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
-            "medicos"    => $this->AddressModel->_modelar_array($this->MedicosModel->getAll(mode:"OBJECT") ?? []),
+            "isLoggedIn" => $this->isLoggedIn,
+            "nurses"     => $this->AddressModel->_modelar_array($this->NursesModel->getAll(mode:"OBJECT") ?? []),
             "success"    => $this->session->flashdata("success_msg") ?? null
         ];
-        $this->load->library('parser');
 
         $this->load->view('commons/header', $data);
         $this->load->view('commons/menu', $data);
-        $this->parser->parse('medicos', $data);
+        $this->load->view('nurses', $data);
         $this->load->view('commons/footer', $data);
     }
 
     public function add(){
         if (!$this->isSuperAdmin){
             $this->session->set_flashdata("success_msg", "Access Forbidden!");
-            redirect("doctors/");
+            redirect("nurses/");
             return;
         }
         $data = [
-            "title" => "Add Doctor"
+            "title" => "Add Nurse"
         ];
 
         $this->form_validation->set_rules('name', 'Name', 'required|min_length[3]|max_length[80]');
-//        $this->form_validation->set_rules('username', 'Username', 'required|min_length[3]|max_length[80]');
+        $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('nib', 'Nib', 'required|max_length[25]');
         $this->form_validation->set_rules('nif', 'Nif', 'required|max_length[9]|min_length[9]');
         $this->form_validation->set_rules('specialty', 'Specialty', 'required|min_length[5]|max_length[100]');
         $this->form_validation->set_rules('address', 'Address', 'required|min_length[5]');
         $this->form_validation->set_rules('city', 'City', 'required|min_length[5]|max_length[100]');
         $this->form_validation->set_rules('birthday', 'Birthdate', 'required');
-//        $this->form_validation->set_rules('image', 'Image', 'required');
 
         if (!$this->form_validation->run()) {
             //validation_errors() -> método responsável por recuperar as mensagens
@@ -66,11 +64,8 @@ class Medicos extends MY_Controller
             unset($result_arr['username']);
 
             if ($user != null) {
-                $config['upload_path'] = './uploads/doctors/';
+                $config['upload_path'] = './uploads/nurses/';
                 $config['allowed_types'] = 'pdf|jpg|png|jpeg';
-                /*$config['max_size'] = '1024';
-                $config['max_width']  = '1024';
-                $config['max_height']  = '768';*/
                 $config['encrypt_name'] = TRUE;
 
                 $this->load->library('upload', $config);
@@ -79,16 +74,16 @@ class Medicos extends MY_Controller
                     $uploadData = $this->upload->data();
                     $result_arr['image_path'] = $uploadData['file_name'];
                     $result_arr["address_id"] = $this->AddressModel->insert($address_arr);
-                    if(!$this->UsersModel->isDoctor($user['id'])){
-                        $medic_id = $this->MedicosModel->insert($result_arr);
-                        $error = $this->model_errors::whatIf($this->UsersModel->setDoctorId($user['id'], $medic_id));
+                    if(!$this->UsersModel->isNurse($user['id'])){
+                        $nurse_id = $this->NursesModel->insert($result_arr);
+                        $error = $this->model_errors::whatIf($this->UsersModel->setNurseId($user['id'], $nurse_id));
                         $data["formErrors"] = $error;
                         if ($data['formErrors'] == null) {
-                            $this->session->set_flashdata("success_msg", "Doctor added with success!");
-                            redirect('doctors/');
+                            $this->session->set_flashdata("success_msg", "Nurse added with success!");
+                            redirect('nurses/');
                         }
                     }else{
-                        $data["formErrors"] = "User you're trying to assoc is already a doctor!";
+                        $data["formErrors"] = "User you're trying to assoc is already a nurse!";
                     }
                 } else {
                     $data['formErrors'] = $this->upload->display_errors();
@@ -100,24 +95,24 @@ class Medicos extends MY_Controller
 
         $this->load->view('commons/header', $data);
         $this->load->view('commons/menu', $data);
-        $this->load->view('medicos_add', $data);
+        $this->load->view('nurses_add', $data);
         $this->load->view('commons/footer', $data);
     }
 
     public function edit($id){
         if (!$this->hasPermissions("Admin")){
             $this->session->set_flashdata("success_msg", "Access Forbidden!");
-            redirect("doctors/");
+            redirect("nurses/");
             return;
         }
         $data = [
-            "title"    => "Edit Doctor",
-            "medico"   => $this->MedicosModel->getById($id),
+            "title"    => "Add Nurse",
+            "nurse"   => $this->NursesModel->getById($id),
             "success"  => $this->session->flashdata("success_msg") ?? null,
             "id"       => $id
         ];
 
-        $data["addr"] = $this->AddressModel->getById($data['medico']['address_id']);
+        $data["addr"] = $this->AddressModel->getById($data['nurse']['address_id']);
 
         $this->form_validation->set_rules('name', 'Name', 'required|min_length[3]|max_length[80]');
         $this->form_validation->set_rules('nib', 'Nib', 'required|max_length[25]');
@@ -138,7 +133,7 @@ class Medicos extends MY_Controller
             unset($result_arr['address'], $result_arr['city']);
 
 
-            $config['upload_path'] = './uploads/doctors/';
+            $config['upload_path'] = './uploads/nurses/';
             $config['allowed_types'] = 'pdf|jpg|png|jpeg';
             $config['encrypt_name'] = TRUE;
 
@@ -150,36 +145,35 @@ class Medicos extends MY_Controller
             } else {
                 $data['formErrors'] = $this->upload->display_errors();
             }
-            $this->AddressModel->update($data['medico']['address_id'], $address_arr);
-            $this->MedicosModel->update($id, $result_arr);
-            $this->session->set_flashdata("success_msg", "Doctor edited with success!");
-            redirect('medicos/');
+            $this->AddressModel->update($data['nurse']['address_id'], $address_arr);
+            $this->NursesModel->update($id, $result_arr);
+            $this->session->set_flashdata("success_msg", "Nurse edited with success!");
+            redirect('nurses/');
         }
 
         $this->load->view('commons/header', $data);
         $this->load->view('commons/menu', $data);
-        $this->load->view('medicos_edit', $data);
+        $this->load->view('nurses_edit', $data);
         $this->load->view('commons/footer', $data);
     }
 
     public function delete($id){
         if (!$this->hasPermissions("Admin")){
             $this->session->set_flashdata("success_msg", "Access Forbidden!");
-            redirect("doctors/");
+            redirect("nurses/");
             return;
         }
-        $medic = $this->MedicosModel->getById($id);
-        if ($medic != null) {
-            $this->UsersModel->unsetDoctor($id);
-            $this->AddressModel->delete($medic['address_id']);
-            $deleted = $this->MedicosModel->delete($id);
-            if ($deleted) {
-                $this->session->set_flashdata("success_msg", "Doctor removed with success!");
-                redirect("doctors/");
+        $nurse = $this->NursesModel->getById($id);
+        if ($nurse != null) {
+            $this->UsersModel->unsetNurse($id);
+            $this->AddressModel->delete($nurse['address_id']);
+            if ($this->NursesModel->delete($id)) {
+                $this->session->set_flashdata("success_msg", "Nurse removed with success!");
+                redirect("nurses/");
                 return;
             }
         }
         $this->session->set_flashdata("success_msg", "Something went wrong!");
-        redirect("doctors/");
+        redirect("nurses/");
     }
 }

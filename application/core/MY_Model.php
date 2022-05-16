@@ -1,6 +1,6 @@
 <?php
 
-class   MY_Model extends CI_Model
+class MY_Model extends CI_Model
 {
     protected $table;
 
@@ -11,24 +11,47 @@ class   MY_Model extends CI_Model
     public function insert($data){
         if (!isset($data) || !$data)
             return false;
-        return $this->db->insert($this->table, $data);
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
     }
 
     /**
      * @throws Exception Choose a valid return type!
      */
-    public function getById($id, $mode=MY_ReturnType::ARRAY, $class=null){
+    public function getById($id, $mode="ARRAY", $class=null){
         if (is_null($id))
             return false;
         $this->db->where('id', $id);
         $query = $this->db->get($this->table);
         if ($query->num_rows() > 0) {
-            if ($mode == MYReturnType::ARRAY)
+            if ($mode == "ARRAY")
                 return $query->row_array();
-            elseif ($mode == MYReturnType::OBJECT)
+            elseif ($mode == "OBJECT")
                 return $query->row_object();
-            elseif ($mode == MYReturnType::OBJECTTOCLASS)
+            elseif ($mode == "OBJECTTOCLASS")
                 return $query->row(0, $class);
+            else
+                throw new Exception("Choose a valid return type!");
+        }
+        return null;
+    }
+
+    /**
+     * @throws Exception Choose a valid return type!
+     */
+    public function get($field, $value, $mode="ARRAY", $class=null){
+        if (is_null($field) || is_null($value))
+            return false;
+        $this->db->where($field, $value);
+        $query = $this->db->get($this->table);
+        $num_rows = $query->num_rows();
+        if ($num_rows > 0) {
+            if ($mode == "ARRAY")
+                return $num_rows > 1 ? $query->result_array() : $query->row_array();
+            elseif ($mode == "OBJECT")
+                return $num_rows > 1 ? $query->result_object() : $query->row_object();
+            elseif ($mode == "OBJECTTOCLASS")
+                return $num_rows > 1 ? $query->result($class) : $query->row(0, $class);
             else
                 throw new Exception("Choose a valid return type!");
         }

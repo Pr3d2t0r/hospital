@@ -14,10 +14,10 @@ create table consultations
     id         int(4) auto_increment primary key,
     doctor_id  int(4) not null,
     patient_id int(4) not null,
-    recipe_id  int(4) not null,
+    recipe_id  int(4) null,
     state      enum ('ESPERA', 'OCORRENDO', 'CONCLUIDA', 'DESMARCADA', 'REMARCADA') not null,
     date       date null,
-    created_at datetime null,
+    created_at datetime not null default NOW(),
     updated_at datetime null
 );
 
@@ -28,7 +28,7 @@ create table contacts
     content text null,
     email   varchar(100) not null,
     name    varchar(80)  not null,
-    sent_at datetime null
+    sent_at datetime default NOW()
 );
 
 create table doctor
@@ -41,7 +41,7 @@ create table doctor
     address_id int(4) not null,
     birthday   date null,
     image_path varchar(250) null,
-    created_at datetime null
+    created_at datetime not null default NOW()
 );
 
 create table nurse
@@ -54,7 +54,7 @@ create table nurse
     address_id int(4) not null,
     birthday   date null,
     image_path varchar(250) null,
-    created_at datetime null
+    created_at datetime not null default NOW()
 );
 
 create table nurse_consultation
@@ -73,7 +73,7 @@ create table patient
     address_id int(4) not null,
     birthday   date null,
     image_path varchar(250) null,
-    created_at datetime null
+    created_at datetime not null default NOW()
 );
 
 create table products
@@ -108,6 +108,7 @@ create table users
     nurse_id    int(4) null,
     doctor_id   int(4) null,
     patient_id  int(4) null,
+    constraint username unique (username),
     constraint doctor_id unique (doctor_id),
     constraint nurse_id unique (nurse_id),
     constraint patient_id unique (patient_id)
@@ -120,3 +121,6 @@ create table users_tokens
     token   varchar(255) null,
     constraint token unique (token)
 );
+
+INSERT INTO `users` (`username`, `password`, `permissions`, `active`, `nurse_id`, `doctor_id`, `patient_id`) VALUES
+    ('super', '1536f37153b9b5beba9fec1e25a1f9f7701dee98', 'a:2:{i:0;s:3:\"Any\";i:1;s:10:\"SuperAdmin\";}', 1, NULL, NULL, NULL);

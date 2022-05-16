@@ -49,9 +49,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'home';
+$route['default_controller'] = 'Consultas';
+
 $route['translate_uri_dashes'] = FALSE;
+
 $route['contactus'] = 'ContactUs';
-$route['doctors'] = 'Medicos';
-$route['doctors/add'] = 'Medicos/add';
-$route['patients'] = 'Utentes';
+
+$route['register'] = 'User/register';
+$route['login']    = 'User/login';
+$route['logout']   = 'User/logout';
+
+$route['doctors']               = 'Medicos';
+$route['doctors/add']           = 'Medicos/add';
+$route['doctors/edit/(:num)']   = 'Medicos/edit/$1';
+$route['doctors/delete/(:num)'] = 'Medicos/delete/$1';
+$route['doctors/(:num)']        = "Medicos/details/$1";
+
+$route['nurses']               = 'Enfermeiros';
+$route['nurses/add']           = 'Enfermeiros/add';
+$route['nurses/edit/(:num)']   = 'Enfermeiros/edit/$1';
+$route['nurses/delete/(:num)'] = 'Enfermeiros/delete/$1';
+$route['nurses/(:num)']        = "Enfermeiros/details/$1";
+
+$route['patients']               = 'Utentes';
+$route['patients/add']           = 'Utentes/add';
+$route['patients/edit/(:num)']   = 'Utentes/edit/$1';
+$route['patients/delete/(:num)'] = 'Utentes/delete/$1';
+$route['patients/(:num)']        = "Utentes/details/$1";
+
+$route['consultations']               = "Consultas/all";
+$route['consultations/add']           = 'Consultas/add';
+$route['consultations/edit/(:num)']   = 'Consultas/edit/$1';
+$route['consultations/delete/(:num)'] = 'Consultas/delete/$1';
+$route['consultations/(:num)']        = "Consultas/details/$1";
