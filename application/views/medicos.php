@@ -1,34 +1,28 @@
 <div class="container">
     <h1>Doctors</h1>
-    <?php
-    if (isset($success) && $success != null):
-        ?>
-        <p><?php echo $success; ?></p>
-    <?php
-    endif;
-    ?>
+        <p>{success}</p>
     <div id="medicos">
-        <?php foreach ($medicos as $medico):?>
+        {medicos}
             <ul class="medico">
-                <li>Name: <?php echo $medico->name;?></li>
-                <li>Specialty: <?php echo $medico->specialty;?></li>
-                <?php if($isLoggedIn):?>
-                    <li>Nib: <?php echo $medico->nib;?></li>
-                    <li>Nif: <?php echo $medico->nif;?></li>
-                    <li>Address: <?php echo $medico->address;?></li>
-                    <li>Birthdate: <?php echo $medico->birthday;?></li>
-                    <?php if ($hasAdmin): ?>
+                <li>Name: {name}</li>
+                <li>Specialty: {specialty}</li>
+                {if isLoggedIn}
+                    <li>Nib: {nib}</li>
+                    <li>Nif: {nif}</li>
+                    <li>Address: {address}</li>
+                    <li>Birthdate: {birthday}</li>
+                    {if hasAdmin}
                         <li>
-                            <a href="<?php echo base_url('doctors/edit/'.$medico->id); ?>">Edit</a>
+                            <a href="{edit_url}{id}">Edit</a>
                             ||
-                            <a href="<?php echo base_url('doctors/remove/'.$medico->id); ?>">Remove</a>
+                            <a href="{remove_url}{id}">Remove</a>
                             ||
-                            <a href="<?php echo base_url('doctors/'.$medico->id); ?>">See More</a>
+                            <a href="{seemore_url}{id}">See More</a>
                         </li>
-                    <?php endif; ?>
-                <?php endif;?>
+                    {/if}
+                {/if}
             </ul>
             <hr>
-        <?php endforeach; ?>
+        {/medicos}
     </div>
 </div>

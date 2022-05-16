@@ -15,17 +15,24 @@ class Medicos extends MY_Controller
 
     public function index(){
         $data = [
-            "title"      => "Medics",
-            "isLoggedIn" => $this->isLoggedIn,
-            "hasAdmin" => $this->isSuperAdmin || $this->hasPermissions("Admin"),
-            "medicos"    => $this->AddressModel->_modelar_array($this->MedicosModel->getAll(mode:"OBJECT") ?? []),
-            "success"    => $this->session->flashdata("success_msg") ?? null
+            "title"       => "Medics",
+            "isLoggedIn"  => $this->isLoggedIn,
+            "hasAdmin"    => $this->isSuperAdmin || $this->hasPermissions("Admin"),
+            "medicos"     => $this->AddressModel->_modelar_array($this->MedicosModel->getAll(mode:"OBJECT") ?? []),
+            "success"     => $this->session->flashdata("success_msg") ?? null,
+            "edit_url"    => base_url('doctors/edit/'),
+            "remove_url"  => base_url('doctors/remove/'),
+            "seemore_url" => base_url('doctors/'),
         ];
         $this->load->library('parser');
-
+        $m = new Mustache_Engine(array(
+            'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/../templates')
+        ));
         $this->load->view('commons/header', $data);
         $this->load->view('commons/menu', $data);
-        $this->parser->parse('medicos', $data);
+//        $this->parser->parse('medicos', $data);
+        $template = $m->loadTemplate('medicos');
+        echo $template->render($data);
         $this->load->view('commons/footer', $data);
     }
 
